@@ -3,7 +3,7 @@
     {
       "name": "Build",
       "setup": "",
-      "run": "timeout -s KILL 2m make all",
+      "run": "timeout -s KILL 5m make all",
       "input": "",
       "output": "",
       "comparison": "included",
