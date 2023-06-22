@@ -73,6 +73,15 @@ def test_server(
             # Wait for server init
             time.sleep(1.0)
 
+            pid_ = proc.pid
+            test_proc = subprocess.Popen(['ps' ,'-o', 'thcount', str(pid_)],
+                           stdout=subprocess.PIPE,
+                           text=True, env=extra_env,)
+            shell_out, _ = test_proc.communicate()
+            test_proc.terminate()
+
+            output = shell_out.splitlines()
+            thread_count = int(output[-1].strip()) - 1
             client_numbers = []
 
             for _ in range(num_client_instances):
@@ -86,6 +95,10 @@ def test_server(
             stdout, _ = proc.communicate()
             unsorted_server_numbers = [int(x) for x in stdout.splitlines()]
             sorted_server_numbers = sorted(unsorted_server_numbers)
+            
+            if thread_count != num_server_threads:
+                warn(f"Expected server threads number incorrect, got {thread_count}")
+                sys.exit(1)
 
             if client_numbers != sorted_server_numbers:
                 warn(f"Client and server responded differently")
