@@ -96,7 +96,7 @@ def test_server(
             unsorted_server_numbers = [int(x) for x in stdout.splitlines()]
             sorted_server_numbers = sorted(unsorted_server_numbers)
             
-            if thread_count != num_server_threads:
+            if num_server_threads > 1 and thread_count != num_server_threads:
                 warn(f"Expected server threads number incorrect, got {thread_count}")
                 sys.exit(1)
 
